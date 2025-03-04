@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        /* Basic styles for the templates */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex; /* Use flexbox for layout */
+        }
+
+        .sidebar {
+            width: 200px;
+            background-color: #007bff;
+            color: white;
+            padding: 15px;
+            height: 100vh; /* Full height */
+        }
+
+        .sidebar h2 {
+            color: white;
+            margin-top: 0;
+        }
+
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+        }
+
+        .sidebar a:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+
+        .content {
+            flex: 1; /* Take the remaining space */
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+        }
+
+        .header h1 {
+            margin: 0;
+        }
+
+        .add-product-button {
+            margin-left: auto;
+            background-color: #5cb85c;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none; /* Remove underline from link */
+        }
+
+        .add-product-button:hover {
+            background-color: #4cae4c;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5; /* Highlight row on hover */
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Admin Menu</h2>
+        <a href="#">Home</a>
+        <a href="#">Products</a>
+        <a href="#">Sellers</a>
+        <a href="#">Orders</a>
+        <a href="#">Customers</a>
+        <a href="#">Discounts</a>
+        <a href="#">Latest News</a>
+        <a href="#">Banners</a>
+        <a href="#">Settings</a>
+    </div>
+    <div class="content">
+        <div class="header">
+            <h1>Admin Dashboard</h1>
+            <a href="{% url 'add_product' %}" class="add-product-button">Add Product</a>
+        </div>
+        <h2>Product List</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                <tr>
+                    <td>{{ product.id }}</td>
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.description }}</td>
+                    <td>{{ product.price }}</td>
+                    <td>{{ product.stock }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5">No products available.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
