@@ -104,21 +104,42 @@
     <div class="sidebar">
         <h2>Admin Menu</h2>
         <a href="#">Home</a>
-        <a href="#">Products</a>
+        <a href="#" class="dropdown-toggle">Products</a>
+        <ul class="dropdown-menu" id="productDropdown">
+            <li><a href="{% url 'inventory_view' %}">Inventory</a></li>
+
+            <li><a href="{% url 'categories' %}">Categories</a></li>
+            <li><a href="{% url 'brand_view' %}">Brand</a></li>
+        </ul>
         <a href="#">Sellers</a>
-        <a href="#">Orders</a>
+        <a href="{% url 'order_view' %}">Orders</a>
         <a href="#">Customers</a>
         <a href="#">Discounts</a>
         <a href="#">Latest News</a>
         <a href="#">Banners</a>
         <a href="#">Settings</a>
     </div>
-    <div class="content">
+        <div class="banners">
+            <h2>Available Banners</h2>
+            <a href="{% url 'banners_list' %}">View All Banners</a>
+            {% for banner in banners1 %}
+                <img src="{{ banner.image.url }}" alt="{{ banner.title }}" style="max-width: 100%; height: auto;">
+            {% endfor %}
+        </div>
+
+        <div class="content">
+
         <div class="header">
             <h1>Admin Dashboard</h1>
-            <a href="{% url 'add_product' %}" class="add-product-button">Add Product</a>
+            {% if is_admin %}
+                <a href="{% url 'add_product' %}" class="add-product-button">Add Product</a>
+            {% endif %}
         </div>
-        <h2>Product List</h2>
+        <form method="GET" action="{% url 'admin_dashboard' %}">
+            <input type="text" name="search" placeholder="Search products..." required style="padding: 10px; border-radius: 4px; border: 1px solid #ccc;">
+            <button type="submit" style="padding: 10px 15px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">Search</button>
+        </form>
+        
         <table>
             <thead>
                 <tr>
@@ -127,24 +148,32 @@
                     <th>Description</th>
                     <th>Price</th>
                     <th>Stock</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 {% for product in products %}
                 <tr>
                     <td>{{ product.id }}</td>
-                    <td>{{ product.name }}</td>
-                    <td>{{ product.description }}</td>
+                    <td>
+                    <img src="/media/products/main/images.jpg" alt="{{ product.name }}" class="product-image" style="max-width: 100px; height: auto;"> {{ product.name }}
+                    </td>
+                    <td>
+                        {{ product.description|truncatewords:10 }}
+                    </td>
                     <td>{{ product.price }}</td>
                     <td>{{ product.stock }}</td>
+                    <td>
+                        <a href="{% url 'edit_product' product.id %}" class="edit-button">Edit</a>
+
+                    </td>
                 </tr>
                 {% empty %}
-                <tr>
-                    <td colspan="5">No products available.</td>
-                </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
+</body>
+</html>
 </body>
 </html>

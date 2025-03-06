@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categories</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .icon-large {
+            font-size: 1.5em; /* Increase icon size */
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        img {
+            max-width: 100px; /* Set maximum width */
+            max-height: 50px; /* Set maximum height */
+            height: auto; /* Maintain aspect ratio */
+        }
+
+        .add-category {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Brand</h1>
+    
+    <div class="add-category">
+        <a href="{% url 'add_brand' %}"> Add_brand</a>
+    </div>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Logo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for brands in brands %}
+            <tr>
+                <td>{{ brands.name }}</td>
+                <td><img src="{{ brands.logo.url }}" alt="{{ brands.name }}"></td>
+                <td>
+                    <a href="{% url 'delete_brand' brands.id %}">
+                        <i class="fas fa-trash icon-large" aria-hidden="true"></i> 
+                    </a>
+                    <a href="{% url 'edit_brand' brands.id %}">
+                        <i class="fas fa-edit icon-large" aria-hidden="true"></i> 
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Product</title>
+    <title>{% if is_edit %}Edit Product{% else %}Add Product{% endif %}</title>
     <style>
         /* Enhanced styles for the templates */
         body {
@@ -69,13 +69,13 @@
             background-color: #4cae4c;
         }
     </style>
-
-
-    <h1>Add a New Product</h1>
-    <form method="POST" action="{% url 'add_product' %}">
+</head>
+<body>
+    <h1>{% if is_edit %}Edit Product{% else %}Add a New Product{% endif %}</h1>
+    <form method="POST" action="{% if is_edit %}{% url 'edit_product' product.id %}{% else %}{% url 'add_product' %}{% endif %}" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}  <!-- Render the form fields -->
-        <button type="submit">Add Product</button>
+        <button type="submit">{% if is_edit %}Edit Product{% else %}Add Product{% endif %}</button>
     </form>
 </body>
 </html>

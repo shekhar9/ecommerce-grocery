@@ -1,47 +1,49 @@
 from django.contrib import admin
 from django.contrib.auth.models import User
 from django.db import models
-from rest_framework import serializers, viewsets, routers
-from django.urls import path, include
+
+
+class Category(models.Model):
+    CATEGORY_HEAD_CHOICES = [
+        ('Health & Wellness', 'Health & Wellness'),
+        ('Electronics', 'Electronics'),
+        ('Clothing', 'Clothing'),
+        ('Home', 'Home'),
+        ('Books', 'Books'),
+        ('Toys', 'Toys'),
+    ]
+
+    title = models.CharField(max_length=255)  # Category Name
+
+    category_head = models.CharField(
+        max_length=255, 
+        choices=CATEGORY_HEAD_CHOICES, 
+        default='Health & Wellness'
+    )  # Category Head
+
+    seller_percentage = models.DecimalField(max_digits=5, decimal_places=2, default=0)  # Seller Percentage
+    media=models.ImageField(upload_to="Categories/",default='Categories/default.jpg') # Category Image
+
+    def __str__(self):
+        return self.title
+
 
 # Models
-class Category(models.Model):
-    name = models.CharField(max_length=255)
-    slug = models.SlugField(unique=True)
-
-    def __str__(self):
-        return self.name
-
-class Brand(models.Model):
-    name = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.name
-
-from django.contrib import admin
-from django.contrib.auth.models import User
-from django.db import models
-from rest_framework import serializers, viewsets, routers
-from django.urls import path, include
-
-# Models
-class Category(models.Model):
-    name = models.CharField(max_length=255)
-    slug = models.SlugField(unique=True)
-
-    def __str__(self):
-        return self.name
-
-class Brand(models.Model):
-    name = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.name
 
 class Product(models.Model):
     STATUS_CHOICES = [
         ('Active', 'Active'),
         ('Inactive', 'Inactive'),
+    ]
+    
+    
+    BRAND_CHOICES= [
+        ('Nike', 'Nike'),
+        ('Adidas', 'Adidas'),
+        ('Burberry', 'Burberry'),
+        ('Puma', 'Puma'),
+        ('Gucci', 'Gucci'),
+        ('Louis Vuitton', 'Louis Vuitton'),
     ]
     name = models.CharField(max_length=255)
     slug = models.SlugField(unique=True, blank=True)
@@ -59,8 +61,7 @@ class Product(models.Model):
     length = models.FloatField(default=0.0)
     width = models.FloatField(default=0.0)
     height = models.FloatField(default=0.0)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="products", default=1)
-    brand = models.ForeignKey(Brand, on_delete=models.CASCADE, null=True, blank=True)
+    brand = models.CharField(max_length=50, choices=BRAND_CHOICES, default='Nike')
     tags = models.CharField(max_length=255, blank=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Active')
     meta_title = models.CharField(max_length=70, blank=True)
@@ -82,5 +83,52 @@ class ProductImage(models.Model):
 
     def __str__(self):
         return f"Image for {self.product.name}"
+
+class Order(models.Model):
+    STATUS_CHOICES = [
+        ('Pending', 'Pending'),
+        ('Completed', 'Completed'),
+        ('Canceled', 'Canceled'),
+    ]
+    
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.IntegerField()
+    order_date = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
+    total_price = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f"Order {self.id} by {self.user.username}"
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    shipping_address = models.CharField(max_length=255, blank=True)
+    phone_number = models.CharField(max_length=15, blank=True)
+    email = models.EmailField(max_length=255, blank=True)
+
+    def __str__(self):
+        return self.user.username
     
 
+
+class  Brand(models.Model):
+    name = models.CharField(max_length=255)
+    logo = models.ImageField(upload_to='brands/', null=True, blank=True)
+    def __str__(self):
+        return self.name
+
+
+class Banners(models.Model):
+    CATEGORY_HEAD_CHOICES = [
+        ('Health & Wellness', 'Health & Wellness'),
+        ('Electronics', 'Electronics'),
+        ('Clothing', 'Clothing'),
+        ('Home', 'Home'),
+        ('Books', 'Books'),
+        ('Toys', 'Toys'),
+    ]
+
+    title=models.CharField(max_length=255)
+    banner_type=models.CharField(max_length=255,choices=CATEGORY_HEAD_CHOICES)
+    image=models.ImageField(upload_to='banners/',null=True,blank=True)
