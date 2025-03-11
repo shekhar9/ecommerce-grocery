@@ -13,12 +13,10 @@
         {% if banner %}
             <input type="hidden" name="banner_id" value="{{ banner.id }}">
         {% endif %}
-
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}  <!-- Render the form fields -->
-        <button type="submit">Add Banner</button>
+        <button type="submit">{% if banner %}Edit Banner{% else %}Add Banner{% endif %}</button>
     </form>
+
+    
     <a href="{% url 'admin_dashboard' %}">Back to Admin Dashboard</a>
 </body>
 </html>

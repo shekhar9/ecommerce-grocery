@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Categories</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Brand List</title>
+    
     <style>
         .icon-large {
             font-size: 1.5em; /* Increase icon size */
         }
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
+            margin: 0;
         }
         table {
             width: 100%;
@@ -40,10 +40,15 @@
     <h1>Brand</h1>
     
     <div class="add-category">
-        <a href="{% url 'add_brand' %}"> Add_brand</a>
+        <a href="{% url 'add_brand' %}"> Add Brand</a>
     </div>
+
+    <form method="GET" action="{% url 'brand_view' %}">
+        <input type="text" name="search" placeholder="Search by name" value="{{ request.GET.search }}">
+        <button type="submit">Filter</button>
+    </form>
     
-    <table>
+    <table class="table table-hover">
         <thead>
             <tr>
                 <th>Title</th>
@@ -68,5 +73,21 @@
             {% endfor %}
         </tbody>
     </table>
+
+    <!-- Pagination Controls -->
+    <div class="pagination">
+        {% if brands.has_previous %}
+            <a href="?page=1">First</a>
+            <a href="?page={{ brands.previous_page_number }}">Previous</a>
+        {% endif %}
+
+        <span>Page {{ brands.number }} of {{ brands.paginator.num_pages }}</span>
+
+        {% if brands.has_next %}
+            <a href="?page={{ brands.next_page_number }}">Next</a>
+            <a href="?page={{ brands.paginator.num_pages }}">Last</a>
+        {% endif %}
+    </div>
+
 </body>
 </html>

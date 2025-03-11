@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="https://bootswatch.com/5/lumen/bootstrap.min.css">
+
+</head>
+<body>
+    <h2>Sillers List</h2>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">User</th>
+            <th scope="col">company_name</th>
+            <th scope="col">sellers_business_name</th>
+            <th scope="col">company_vatnumber</th>
+            <th scope="col">company_number</th>
+            <th scope="col">company_address</th>
+            <th scope="col"Actions></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for seller in sellers %}
+        <tr>
+            <td>{{ seller.id }}</td>
+            <td>{{ seller.name }}</td>
+            <td>{{ seller.company_name }}</td>
+            <td>{{ seller.sellers_business_name }}</td>
+            <td>{{ seller.company_vatnumber }}</td>
+            <td>{{ seller.company_number }}</td>
+            <td>{{ seller.company_address }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5">No products available.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+    <a href="{% url 'admin_dashboard' %}">Back to Admin Dashboard</a>
+    <a href="{% url 'add_sellers' %}">Add Sellers</a>
+</body>
+</html>

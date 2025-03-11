@@ -25,7 +25,12 @@
 </head>
 <body>
     <h1>Banner List</h1>
+    <form method="GET" action="{% url 'banners_list' %}">
+        <input type="text" name="search" placeholder="Search by name" value="{{ request.GET.search }}">
+        <button type="submit">Filter</button>
+    </form>
     <a href="{% url 'add_banner' %}">Add New Banner</a>
+    
     <table>
         <thead>
             <tr>

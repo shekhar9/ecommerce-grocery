@@ -6,6 +6,20 @@ TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
 SECRET_KEY = 'your-secret-key'
 DEBUG = True
+import os
+
+# Static files (CSS, JavaScript, Images)
+STATIC_URL = '/static/'
+
+# Define STATICFILES_DIRS to tell Django where to find static files during development
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),  # Ensure it matches your static folder path
+]
+
+# Define STATIC_ROOT to collect all static files when running collectstatic (for production)
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+
 ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
@@ -17,15 +31,17 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
-    'ecommerceapp',  # Add the app to the installed apps
+    'ecommerceapp',
+    'crispy_forms',
+    'crispy_bootstrap5',  # Add the app to the installed apps
 
 ]
-
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -54,7 +70,7 @@ WSGI_APPLICATION = 'ecommerce.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME':'ecommerce1',
+        'NAME':'ecommerce',
         'USER':'postgres',
         'PASSWORD':'192P1a0544@',
         'HOST':'localhost',
@@ -92,6 +108,14 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,  # Set the number of items per page
+}
+
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
@@ -100,3 +124,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     )
 }
+
+
+
+

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Details</title>
+    <style>
+        body { margin: 20px; font-family: Arial, sans-serif; }
+        h1 { margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #ddd; padding: 8px; }
+        th { background-color: #f2f2f2; text-align: left; }
+        tr:hover { background-color: #f5f5f5; }
+    </style>
+</head>
+<body>
+
+    <h1>Order Details</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Product ID</th>
+                <th>Product Name</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Main Image</th>
+                <th>Quantity</th>
+                <th>Fulfilled</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+                <tr>
+                    <td>{{ order.id }}</td>
+                    <td>{{ order.user.username }}</td>
+                    <td>{{ order.user.email }}</td>
+                    <td>{{ order.product.id }}</td>
+                    <td>{{ order.product.name }}</td>
+                    <td>{{ order.product.description }}</td>
+                    <td>{{ order.product.price }}</td>
+                    <td>{{ order.product.stock }}</td>
+                    <td><img src="{{ order.product.main_image }}" alt="{{ order.product.name }}" width="100"></td>
+                    <td>{{ order.quantity }}</td>
+                    <td>{{ order.fulfilled_orders|yesno:"Yes,No" }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h1>Returned Items</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Return ID</th>
+                <th>Username</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Created At</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in returned_items %}
+                <tr>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.user }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ item.price }}</td>
+                    <td>{{ item.created_at }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+</html>

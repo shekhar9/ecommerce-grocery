@@ -11,14 +11,16 @@
         }
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
+            margin: 0; /* Changed margin to 0 */
+
         }
         table {
             width: 100%;
             border-collapse: collapse;
         }
         th, td {
-            padding: 10px;
+            padding: 5px; /* Reduced padding */
+
             text-align: left;
             border: 1px solid #ddd;
         }
@@ -40,8 +42,10 @@
         <select name="category_head" id="category_head" onchange="this.form.submit()">
             <option value="">-- All Categories --</option>
             {% for choice in category_heads %}
-                <option value="{{ choice.0 }}" {% if choice.0 == request.GET.category_head %}selected{% endif %}>{{ choice.1 }}</option>
+                <option value="{{ choice }}" {% if choice == request.GET.category_head %}selected{% endif %}>{{ choice }}</option>
             {% endfor %}
+
+            
         </select>
     </form>
 
@@ -55,7 +59,6 @@
         <thead>
             <tr>
                 <th>Title</th>
-                <th>Category Head</th>
                 <th>Seller Percentage</th>
                 <th>Media</th>
                 <th>Actions</th>
@@ -65,7 +68,6 @@
             {% for category in categories %}
             <tr>
                 <td>{{ category.title }}</td>
-                <td>{{ category.category_head }}</td>
                 <td>{{ category.seller_percentage }}</td>
                 <td><img src="{{ category.media.url }}" alt="{{ category.title }}"></td>
                 <td>
@@ -80,5 +82,24 @@
             {% endfor %}
         </tbody>
     </table>
+    {% for category in categories %}
+    <p>{{ category.name }}</p>
+{% endfor %}
+
+<!-- Pagination Controls -->
+<div class="pagination">
+    {% if categories.has_previous %}
+        <a href="?page=1{% if category_head %}&category_head={{ category_head }}{% endif %}">First</a>
+        <a href="?page={{ categories.previous_page_number }}{% if category_head %}&category_head={{ category_head }}{% endif %}">Previous</a>
+    {% endif %}
+
+    <span>Page {{ categories.number }} of {{ categories.paginator.num_pages }}</span>
+
+    {% if categories.has_next %}
+        <a href="?page={{ categories.next_page_number }}{% if category_head %}&category_head={{ category_head }}{% endif %}">Next</a>
+        <a href="?page={{ categories.paginator.num_pages }}{% if category_head %}&category_head={{ category_head }}{% endif %}">Last</a>
+    {% endif %}
+</div>
+
 </body>
 </html>

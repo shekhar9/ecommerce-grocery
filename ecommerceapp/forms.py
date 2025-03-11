@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import Product, Order,Category,Brand,Banners
+from .models import Product, Order, Category, Brand, Banners,Sellers,Discount
+import re  # Import regex for password validation
 
 class RegisterForm(forms.Form):
     username = forms.CharField(max_length=100, required=True)
@@ -14,8 +15,22 @@ class RegisterForm(forms.Form):
         cleaned_data = super().clean()
         password = cleaned_data.get('password')
         confirm_password = cleaned_data.get('confirm_password')
+
+        # Password validation
         if password != confirm_password:
             raise forms.ValidationError('Passwords do not match')
+
+        if len(password) < 8:
+            raise forms.ValidationError("Password must be at least 8 characters long.")
+        if not re.search(r"[A-Z]", password):
+            raise forms.ValidationError("Password must contain at least one uppercase letter.")
+        if not re.search(r"[a-z]", password):
+            raise forms.ValidationError("Password must contain at least one lowercase letter.")
+        if not re.search(r"[0-9]", password):
+            raise forms.ValidationError("Password must contain at least one digit.")
+        if not re.search(r"[!@#$%^&*(),.?\":{}|<>]", password):
+            raise forms.ValidationError("Password must contain at least one special character.")
+
         return cleaned_data
 
     def clean_username(self):
@@ -43,39 +58,54 @@ class LoginForm(forms.Form):
     password = forms.CharField(max_length=100, required=True, widget=forms.PasswordInput)
 
 class ProductForm(forms.ModelForm):
+    category_head = forms.ModelChoiceField(
+        queryset=Category.objects.order_by('category_head').distinct('category_head'),
+        required=True,
+        label="Category Type"
+    )
+
     class Meta:
         model = Product
         fields = [
             'name', 'slug', 'description', 'sku', 'ean_number',
             'main_image', 'price', 'mrp', 'charge_tax', 'stock',
             'weight', 'weight_unit', 'size_in', 'length', 'width', 'height',
-             'brand', 'tags', 'status', 'meta_title',
-            'meta_description', 'url_handle'
+            'brand', 'tags', 'status', 'meta_title',
+            'meta_description', 'category_head', 'rating'
         ]
         widgets = {
             'description': forms.Textarea(attrs={'rows': 3}),
             'meta_description': forms.Textarea(attrs={'rows': 3}),
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['category_head'].queryset = Category.objects.all()  
+        self.fields['category_head'].label_from_instance = lambda obj: obj.category_head  
+
 class CategoryForm(forms.ModelForm):
     class Meta:
         model = Category
-        fields = ['category_head','title', 'seller_percentage', 'media']
+        fields = ['category_head', 'title', 'seller_percentage', 'media']
 
 class BrandForm(forms.ModelForm):
     class Meta:
         model = Brand
-        fields = ['name','logo']
-    
+        fields = ['name', 'logo']
 
-class OrderForm(forms.ModelForm):
-
+class BannersForm(forms.ModelForm):
     class Meta:
-        model = Order
-        fields = ['user', 'product', 'quantity', 'status']
+        model = Banners
+        fields = ['title', 'banner_type', 'image']
 
 
-class BnnersForm(forms.ModelForm):
+class SellersForms(forms.ModelForm):
     class Meta:
-        model=Banners
-        fields=['title','banner_type','image']
+        model = Sellers
+        fields = '__all__'
+
+
+class DiscountForm(forms.ModelForm):
+    class Meta:
+        model=Discount
+        fields='__all__'
