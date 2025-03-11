@@ -1,23 +1,29 @@
+{% load crispy_forms_tags %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% if is_edit %}Edit Category{% else %}Add Category{% endif %}</title>
+    <link rel="stylesheet" href="https://bootswatch.com/5/quartz/bootstrap.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
         }
+        
     </style>
 </head>
 <body>
     <h1>{% if is_edit %}Edit Category{% else %}Add Category{% endif %}</h1>
-    <form method="POST" action="{% if is_edit %}{% url 'edit_category' product.id %}{% else %}{% url 'add_category' %}{% endif %}" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">{% if is_edit %}Edit Category{% else %}Add Category{% endif %}</button>
-    </form>
-    <a href="{% url 'categories' %}">Back to Categories</a>
+    <div class="container"style="width: 500px;">
+        <form method="POST" action="{% if is_edit %}{% url 'edit_category' product.id %}{% else %}{% url 'add_category' %}{% endif %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button type="submit" class="btn btn-primary">{% if is_edit %}Edit Category{% else %}Add Category{% endif %}</button>
+        </form>
+    </div>
+    
 </body>
 </html>

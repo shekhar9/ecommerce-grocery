@@ -20,10 +20,15 @@
 
 .module ul.actionlist {
     margin-left: 0;
+    margin: 8px; /* Updated margin */
 }
 
 ul.actionlist li {
     list-style-type: none;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.dashboard .module {
+    margin-bottom: 10px; /* Updated margin */
 }
