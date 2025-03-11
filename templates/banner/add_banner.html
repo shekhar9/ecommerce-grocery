@@ -1,22 +1,27 @@
+{% load crispy_forms_tags %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Banner</title>
+    <link rel="stylesheet" href="https://bootswatch.com/5/journal/bootstrap.min.css">
 </head>
 <body>
-    <h1>{% if banner %}Edit Banner{% else %}Add Banner{% endif %}</h1>
+    <div class="container" style="width: 500px;">
+        <h1>{% if banner %}Edit Banner{% else %}Add Banner{% endif %}</h1>
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form.as_p }}  <!-- Render the form fields -->
+        {{ form|crispy }}  <!-- Render the form fields -->
         {% if banner %}
             <input type="hidden" name="banner_id" value="{{ banner.id }}">
         {% endif %}
-        <button type="submit">{% if banner %}Edit Banner{% else %}Add Banner{% endif %}</button>
+        <button type="submit" class="btn btn-primary">{% if banner %}Edit Banner{% else %}Add Banner{% endif %}</button>
     </form>
 
     
-    <a href="{% url 'admin_dashboard' %}">Back to Admin Dashboard</a>
+    </div>
+    
 </body>
 </html>
